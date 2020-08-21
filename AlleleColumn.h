@@ -17,16 +17,10 @@ class AlleleColumn {
 public:
     explicit AlleleColumn(allele_column_t&& data);
 
-    [[nodiscard]] Nucleotide find_normal() const;
-
     friend std::ostream& operator<<(std::ostream& os, AlleleColumn const& allele);
-
 private:
-    void replace_unknown();
-
-private:
-    allele_column_t data;
     Nucleotide consensus;
+    std::vector<bool> data;
 };
 
 inline std::ostream& operator<<(std::ostream& os, AlleleColumn const& allele) {

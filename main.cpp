@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
         }
         data.emplace_back(std::move(allele));
     }
-    print_data(data);
+//    print_data(data);
 
     return 0;
 }
