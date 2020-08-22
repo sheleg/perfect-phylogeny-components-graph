@@ -15,21 +15,38 @@ using nucleotide_counter_t = std::map<Nucleotide, int>;
 
 class AlleleColumn {
 public:
-    explicit AlleleColumn(allele_column_t const& data);
+    using data_t = bool;
+
+    explicit AlleleColumn(allele_column_t const &data);
+
+    explicit AlleleColumn(std::vector<data_t> &&data) :
+            data(std::move(data)) {}
+
+    [[nodiscard]] size_t size() const;
+
+    data_t operator[](size_t index) const;
 
     Nucleotide get_consensus() const;
 
     friend std::ostream& operator<<(std::ostream& os, AlleleColumn const& allele);
-private:
-    Nucleotide consensus;
 
-    std::vector<bool> data;
+private:
+    Nucleotide consensus = Nucleotide::Unknown;
+    std::vector<data_t> data;
 };
 
-inline std::ostream& operator<<(std::ostream& os, AlleleColumn const& allele) {
+inline std::ostream &operator<<(std::ostream &os, AlleleColumn const &allele) {
     for (auto const &nucleotide : allele.data) {
         os << nucleotide;
     }
 
     return os;
+}
+
+size_t AlleleColumn::size() const {
+    return data.size();
+}
+
+AlleleColumn::data_t AlleleColumn::operator[](size_t index) const {
+    return data[index];
 }
