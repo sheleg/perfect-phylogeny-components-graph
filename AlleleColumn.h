@@ -15,7 +15,7 @@ using nucleotide_counter_t = std::map<Nucleotide, int>;
 
 class AlleleColumn {
 public:
-    explicit AlleleColumn(allele_column_t&& data);
+    explicit AlleleColumn(allele_column_t const& data);
 
     friend std::ostream& operator<<(std::ostream& os, AlleleColumn const& allele);
 private:
