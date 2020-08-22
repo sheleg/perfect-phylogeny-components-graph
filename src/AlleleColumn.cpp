@@ -40,3 +40,7 @@ AlleleColumn::AlleleColumn(allele_column_t const& data) :
     data(replace_unknown(data, consensus))
 {
 }
+
+Nucleotide AlleleColumn::get_consensus() const {
+    return consensus;
+}
