@@ -4,28 +4,39 @@
 
 #include "AlleleColumn.h"
 
-AlleleColumn::AlleleColumn(allele_column_t&& data) {
-    this->data = std::move(data);
-    consensus = find_normal();
-    replace_unknown();
-}
+namespace {
 
-[[nodiscard]] Nucleotide AlleleColumn::find_normal() const {
+Nucleotide find_normal(allele_column_t const& data) {
     // TODO: possibly do not count N
     nucleotide_counter_t nucleotide_counter;
     for (auto nucleotide : data) {
         ++nucleotide_counter[nucleotide];
     }
+
     return std::max_element(
             nucleotide_counter.begin(),
             nucleotide_counter.end(),
             [](auto a, auto b) { return a.second < b.second; })->first;
 }
 
-void AlleleColumn::replace_unknown() {
-    std::replace_if(
-            data.begin(),
-            data.end(),
-            [](auto n) { return n == Nucleotide::Unknown; },
-            consensus);
+std::vector<bool> replace_unknown(allele_column_t const& data, Nucleotide const consensus) {
+    std::vector<bool> result;
+
+    std::transform( data.begin(), data.end(),
+                    std::back_inserter(result),
+                    [&consensus](auto const& nucleotide)
+                    {
+                        return nucleotide != consensus &&
+                               nucleotide != Nucleotide::Unknown;
+                    });
+
+    return result;
+}
+
+}
+
+AlleleColumn::AlleleColumn(allele_column_t const& data) :
+    consensus(find_normal(data)),
+    data(replace_unknown(data, consensus))
+{
 }

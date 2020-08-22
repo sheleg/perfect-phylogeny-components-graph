@@ -9,12 +9,6 @@
 using input_data_t = std::vector<Sequence>;
 using data_t = std::vector<AlleleColumn>;
 
-void print_data(data_t const &data) {
-    for (auto const &allele_column : data) {
-        std::cout << allele_column;
-    }
-}
-
 input_data_t read_fasta(std::string const &filename) {
     std::ifstream fin(filename);
     if (!fin.good()) {
@@ -47,7 +41,6 @@ int main(int argc, char **argv) {
         }
         data.emplace_back(std::move(allele));
     }
-    print_data(data);
 
     return 0;
 }
