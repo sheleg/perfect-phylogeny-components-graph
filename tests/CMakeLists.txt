@@ -1,10 +1,17 @@
 find_package(Catch2 REQUIRED)
-add_executable(
-        matching_search_tests
+
+set(TARGET_NAME matching_search_tests)
+
+add_executable(${TARGET_NAME}
         Sample.cpp
-        IsPerfectPhylogenyPair.cpp)
-target_link_libraries(matching_search_tests Catch2::Catch2)
+        AlleleColumnTest.cpp)
+
+target_link_libraries(${TARGET_NAME}
+        PUBLIC Catch2::Catch2)
+
+target_link_libraries(${TARGET_NAME}
+        PUBLIC matching_search)
 
 include(CTest)
 include(Catch)
-catch_discover_tests(matching_search_tests)
+catch_discover_tests(${TARGET_NAME})

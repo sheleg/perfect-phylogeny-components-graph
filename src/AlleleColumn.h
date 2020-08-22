@@ -17,9 +17,12 @@ class AlleleColumn {
 public:
     explicit AlleleColumn(allele_column_t const& data);
 
+    Nucleotide get_consensus() const;
+
     friend std::ostream& operator<<(std::ostream& os, AlleleColumn const& allele);
 private:
     Nucleotide consensus;
+
     std::vector<bool> data;
 };
 
@@ -27,7 +30,6 @@ inline std::ostream& operator<<(std::ostream& os, AlleleColumn const& allele) {
     for (auto const &nucleotide : allele.data) {
         os << nucleotide;
     }
-    os << "\t" << allele.consensus << std::endl;
 
     return os;
 }
