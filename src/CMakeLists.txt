@@ -1,0 +1,10 @@
+add_executable(
+        matching_search
+        main.cpp
+        Sequence.cpp
+        Sequence.h
+        Nucleotide.cpp
+        Nucleotide.h
+        AlleleColumn.cpp
+        AlleleColumn.h
+        perfect_phylogeny_graph.cpp)
