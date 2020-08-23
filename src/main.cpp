@@ -1,6 +1,6 @@
 #include "AlleleColumn.h"
 #include "Sequence.h"
-
+#include "PerfectPhylogenyGraph.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -42,14 +42,7 @@ int main(int argc, char **argv) {
         data.emplace_back(std::move(allele));
     }
 
+    PerfectPhylogenyGraph graph(data);
+
     return 0;
 }
-
-//    TODO: convert to unittests!
-//    Sequence s("GAAAA", "");
-//    allele_column_t ac;
-//    for (int i = 0; i < 5; ++i) {
-//        ac.push_back(s[i]);
-//    }
-//    AlleleColumn a(std::move(ac));
-//    std::cout << a.find_normal();

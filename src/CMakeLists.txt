@@ -8,7 +8,11 @@ add_library(${TARGET_NAME}
         AlleleColumn.cpp
         AlleleColumn.h
         ComponentHelper.cpp
-        ComponentHelper.h)
+        ComponentHelper.h
+        PerfectPhylogenyGraph.cpp
+        PerfectPhylogenyGraph.h
+        PhylogenyHelpers.h
+)
 
 add_executable(matching_search_exec main.cpp)
 target_link_libraries(matching_search_exec
