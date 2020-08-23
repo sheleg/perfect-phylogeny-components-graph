@@ -44,3 +44,11 @@ AlleleColumn::AlleleColumn(allele_column_t const& data) :
 Nucleotide AlleleColumn::get_consensus() const {
     return consensus;
 }
+
+size_t AlleleColumn::size() const {
+    return data.size();
+}
+
+AlleleColumn::data_t AlleleColumn::operator[](size_t index) const {
+    return data[index];
+}

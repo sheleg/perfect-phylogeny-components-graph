@@ -42,11 +42,3 @@ inline std::ostream &operator<<(std::ostream &os, AlleleColumn const &allele) {
 
     return os;
 }
-
-size_t AlleleColumn::size() const {
-    return data.size();
-}
-
-AlleleColumn::data_t AlleleColumn::operator[](size_t index) const {
-    return data[index];
-}
