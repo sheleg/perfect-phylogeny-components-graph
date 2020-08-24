@@ -7,8 +7,6 @@ add_library(${TARGET_NAME}
         Nucleotide.h
         AlleleColumn.cpp
         AlleleColumn.h
-        ComponentHelper.cpp
-        ComponentHelper.h
         PerfectPhylogenyGraph.cpp
         PerfectPhylogenyGraph.h
         PhylogenyHelpers.h

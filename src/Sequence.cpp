@@ -6,9 +6,16 @@
 
 Sequence::Sequence(const std::string &base, const std::string &name) {
     this->name = name;
-    for (const auto nucleotide_symbol : base) {
-        const auto nucleotide = to_nucleotide_enum(nucleotide_symbol);
-        nucleotides.push_back(nucleotide);
+
+    nucleotides.reserve(base.size());
+    try {
+        for (const auto nucleotide_symbol : base) {
+            const auto nucleotide = to_nucleotide_enum(nucleotide_symbol);
+            nucleotides.push_back(nucleotide);
+        }
+    } catch (std::invalid_argument &e) {
+        std::cout << base << std::endl << e.what() << std::endl;
+        exit(1);
     }
 }
 

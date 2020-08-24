@@ -18,9 +18,20 @@ Nucleotide to_nucleotide_enum(char const letter) {
             return Nucleotide::T;
         case 'N':
         case '?':
+        case '-':
+        case 'Y':
+        case 'S':
+        case 'R':
+        case 'K':
+        case 'W':
+        case 'M':
+        case 'D':
+        case 'V':
+        case 'B':
+        case 'H':
             return Nucleotide::Unknown;
         default:
-            throw std::invalid_argument("unknown nucleotide");
+            throw std::invalid_argument(std::string("parsing unknown nucleotide: ") + letter);
     }
 }
 
@@ -37,6 +48,6 @@ char from_nucleotide_enum(Nucleotide const &nucleotide) {
         case Nucleotide::Unknown:
             return 'N';
         default:
-            throw std::invalid_argument("unknown nucleotide");
+            throw std::invalid_argument("encoding unknown nucleotide");
     }
 }

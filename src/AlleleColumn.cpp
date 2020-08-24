@@ -21,6 +21,7 @@ Nucleotide find_normal(allele_column_t const& data) {
 
 std::vector<bool> replace_unknown(allele_column_t const& data, Nucleotide const consensus) {
     std::vector<bool> result;
+    result.reserve(data.size());
 
     std::transform( data.begin(), data.end(),
                     std::back_inserter(result),
