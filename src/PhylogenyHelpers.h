@@ -8,9 +8,9 @@
 #include "AlleleColumn.h"
 
 bool is_perfect_phylogeny_pair(AlleleColumn const &first, AlleleColumn const &second) {
-    if (first.size() != second.size()) {
-        throw std::invalid_argument("columns must be same size");
-    }
+    // if (first.size() != second.size()) {
+    //     throw std::invalid_argument("columns must be same size");
+    // }
 
     uint8_t res = 0;
     for (int i = 0; i < first.size(); ++i) {

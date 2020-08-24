@@ -4,20 +4,23 @@
 
 #include "PerfectPhylogenyGraph.h"
 #include "PhylogenyHelpers.h"
-
+#include <fstream>
 #include <boost/graph/strong_components.hpp>
 
 PerfectPhylogenyGraph::graph_t PerfectPhylogenyGraph::create_prefect_phylogeny_graph(
         matrix_t const &data) {
-    graph_t res(data.size());
+    graph_t res;
+    std::ofstream fout("graph.txt");
     for (int i = 0; i < data.size(); ++i) {
         std::cout << "c" << i << std::endl;
         for (int j = 0; j < i; ++j) {
-            if (is_perfect_phylogeny_pair(data[i], data[j])) {
+            if (!is_perfect_phylogeny_pair(data[i], data[j])) {
+                fout << j << " ";
                 boost::add_edge(i, j, res);
                 boost::add_edge(j, i, res);
             }
         }
+        fout << std::endl;
     }
 
     std::cout << "graph created" << std::endl;

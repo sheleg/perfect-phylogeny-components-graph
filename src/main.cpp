@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     PerfectPhylogenyGraph graph(data);
     data.resize(0, AlleleColumn(std::vector<Nucleotide>{Nucleotide::A}));
 
-    std::cout << graph.get_strong_components() << " strong components" << std::endl;
+//    std::cout << graph.get_strong_components() << " strong components" << std::endl;
 
     return 0;
 }
