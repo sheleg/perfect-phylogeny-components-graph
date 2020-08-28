@@ -6,29 +6,68 @@
 #include "PhylogenyHelpers.h"
 #include <fstream>
 #include <boost/graph/strong_components.hpp>
+#include <thread>
 
-PerfectPhylogenyGraph::graph_t PerfectPhylogenyGraph::create_prefect_phylogeny_graph(
-        matrix_t const &data) {
-    graph_t res;
-    std::ofstream fout("graph.txt");
-    for (int i = 0; i < data.size(); ++i) {
+void calculate_part(
+        PerfectPhylogenyGraph::matrix_t const &data,
+        std::vector<std::vector<bool>> &res,
+        size_t from,
+        size_t to) {
+    for (int i = from; i < to; ++i) {
         std::cout << "c" << i << std::endl;
         for (int j = 0; j < i; ++j) {
             if (!is_perfect_phylogeny_pair(data[i], data[j])) {
-                fout << j << " ";
-                boost::add_edge(i, j, res);
-                boost::add_edge(j, i, res);
+                res[i].push_back(j);
             }
         }
-        fout << std::endl;
+    }
+}
+
+PerfectPhylogenyGraph::graph_t PerfectPhylogenyGraph::create_prefect_phylogeny_graph(
+        matrix_t const &data,
+        bool dump = true) {
+    graph_t result;
+    std::ofstream fout;
+    if (dump) fout = std::ofstream("graph.txt");
+
+    std::vector<std::vector<bool>> res;
+    res.resize(data.size());
+
+    std::vector<std::thread> threads;
+    const size_t total = data.size();
+    const size_t count = 4;
+    size_t from = 0, to;
+    for (int k = 0; k < count; ++k) {
+//        (from + to) * (to - from) == total * total / count
+//        to2 - from2 == c
+//        to2 = c + from2
+        to = std::min((size_t) ceil(sqrt(total * total / count + from * from)), total);
+        threads.emplace_back([&, from, to]() {
+            calculate_part(data, res, from, to);
+        });
+        from = to;
+    }
+
+    for (auto &thread : threads) {
+        thread.join();
+    }
+
+    for (int i = 0; i < res.size(); ++i) {
+        std::cout << "r" << i << std::endl;
+        for (int j = 0; j < res[i].size(); ++j) {
+            if (dump) fout << j << " ";
+            boost::add_edge(i, j, result);
+            boost::add_edge(j, i, result);
+        }
+        if (dump) fout << std::endl;
     }
 
     std::cout << "graph created" << std::endl;
-    return res;
+    return result;
 }
 
-int PerfectPhylogenyGraph::get_strong_components() const {
-    std::vector<int> c(graph.m_vertices.size());
+int PerfectPhylogenyGraph::get_strong_components(std::vector<int> &c) const {
+    c = std::vector<int>(graph.m_vertices.size());
     int components =
             boost::strong_components(
                     graph,
@@ -38,6 +77,36 @@ int PerfectPhylogenyGraph::get_strong_components() const {
     return components;
 }
 
-PerfectPhylogenyGraph::~PerfectPhylogenyGraph() {
-    graph.clear();
+int PerfectPhylogenyGraph::max_component_size() const {
+    std::vector<int> c;
+    get_strong_components(c);
+
+    std::vector<int> counts(c.size(), 0);
+    for (auto el : c) {
+        ++counts[el];
+    }
+
+    auto it = std::max_element(counts.begin(), counts.end());
+    return *it;
+}
+
+void PerfectPhylogenyGraph::load(const std::string &filename) {
+    if (!graph.m_edges.empty()) {
+        throw std::invalid_argument("Graph is already initialized");
+    }
+
+    std::ifstream fin(filename);
+    for (int i = 0; i < graph.m_vertices.size(); ++i) {
+        std::cout << "c" << i << std::endl;
+        std::string line;
+        std::getline(fin, line);
+        std::istringstream myStream(line);
+        std::istream_iterator<int> begin(myStream), eof;
+        std::vector<int> numbers(begin, eof);
+
+        for (auto n : numbers) {
+            boost::add_edge(i, n, graph);
+            boost::add_edge(n, i, graph);
+        }
+    }
 }

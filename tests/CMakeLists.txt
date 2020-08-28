@@ -6,7 +6,8 @@ add_executable(${TARGET_NAME}
         Sample.cpp
         AlleleColumnTest.cpp
         PerfectPhylogenyTest.cpp
-        PerfectPhylogenyGraphTest.cpp)
+        PerfectPhylogenyGraphTest.cpp
+)
 
 target_link_libraries(${TARGET_NAME}
         PUBLIC Catch2::Catch2)

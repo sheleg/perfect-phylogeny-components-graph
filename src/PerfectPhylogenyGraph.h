@@ -10,20 +10,25 @@
 
 
 class PerfectPhylogenyGraph {
+public:
     using matrix_t = std::vector<AlleleColumn>;
     using graph_t = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS>;
 
-public:
-    explicit PerfectPhylogenyGraph(matrix_t const &input) :
-            graph(create_prefect_phylogeny_graph(input)) {}
+    explicit PerfectPhylogenyGraph(matrix_t const &input, bool dump = true) :
+            graph(create_prefect_phylogeny_graph(input, dump)) {}
 
-    static graph_t create_prefect_phylogeny_graph(const matrix_t &data);
+    explicit PerfectPhylogenyGraph(size_t size) :
+            graph(size) {}
 
-    int get_strong_components() const;
+    static graph_t create_prefect_phylogeny_graph(
+            const matrix_t &data,
+            bool dump);
 
-private:
-public:
-    virtual ~PerfectPhylogenyGraph();
+    [[nodiscard]] int get_strong_components(std::vector<int> &c) const;
+
+    void load(std::string const &filename);
+
+    [[nodiscard]] int max_component_size() const;
 
 private:
     graph_t graph;
